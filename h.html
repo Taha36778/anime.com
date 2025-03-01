@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Hub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #2ecc71, #3498db);
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            margin: 20px 0;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .anime {
+            background: white;
+            color: black;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 200px;
+        }
+        .anime:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        .anime img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .episodes {
+            display: none;
+            margin-top: 20px;
+        }
+        .episode {
+            background: white;
+            color: black;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .episode:hover {
+            background: #ddd;
+        }
+        .back-btn {
+            display: none;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: white;
+            color: black;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        iframe {
+            width: 90%;
+            height: 350px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Anime Collection</h1>
+    
+    <div class="container" id="anime-list">
+        <!-- Anime will be inserted here dynamically -->
+    </div>
+
+    <div class="episodes" id="episode-list">
+        <h2 id="anime-title"></h2>
+        <div id="episodes-container"></div>
+        <iframe id="video-player" src="" allowfullscreen></iframe>
+        <button class="back-btn" onclick="showAnimeList()">← Back to Home</button>
+    </div>
+
+    <script>
+        const animeData = [
+            { 
+                id: 1, 
+                title: "Naruto", 
+                image: "https://via.placeholder.com/200x300?text=Naruto",
+                episodes: [
+                    "https://www.youtube.com/embed/J3JzXyEPydc",
+                    "https://www.youtube.com/embed/tktSAdgGs48"
+                ]
+            },
+            { 
+                id: 2, 
+                title: "One Piece", 
+                image: "https://via.placeholder.com/200x300?text=One+Piece",
+                episodes: [
+                    "https://www.youtube.com/embed/hqB1lCUBNU4",
+                    "https://www.youtube.com/embed/MilM2Q5EmK8"
+                ]
+            },
+            { 
+                id: 3, 
+                title: "Attack on Titan", 
+                image: "https://via.placeholder.com/200x300?text=AOT",
+                episodes: [
+                    "https://www.youtube.com/embed/MGRm4IzK1SQ",
+                    "https://www.youtube.com/embed/BkZNpNlz7Xo"
+                ]
+            }
+        ];
+
+        function showAnimeList() {
+            document.getElementById("anime-list").style.display = "flex";
+            document.getElementById("episode-list").style.display = "none";
+        }
+
+        function showEpisodes(animeId) {
+            const anime = animeData.find(a => a.id === animeId);
+            document.getElementById("anime-title").innerText = anime.title;
+            document.getElementById("episodes-container").innerHTML = "";
+
+            anime.episodes.forEach((ep, index) => {
+                let episodeDiv = document.createElement("div");
+                episodeDiv.className = "episode";
+                episodeDiv.innerText = `Episode ${index + 1}`;
+                episodeDiv.onclick = () => playEpisode(ep);
+                document.getElementById("episodes-container").appendChild(episodeDiv);
+            });
+
+            document.getElementById("anime-list").style.display = "none";
+            document.getElementById("episode-list").style.display = "block";
+        }
+
+        function playEpisode(videoUrl) {
+            document.getElementById("video-player").src = videoUrl;
+        }
+
+        function loadAnime() {
+            const container = document.getElementById("anime-list");
+            animeData.forEach(anime => {
+                let animeDiv = document.createElement("div");
+                animeDiv.className = "anime";
+                animeDiv.innerHTML = `
+                    <img src="${anime.image}" alt="${anime.title}">
+                    <h3>${anime.title}</h3>
+                `;
+                animeDiv.onclick = () => showEpisodes(anime.id);
+                container.appendChild(animeDiv);
+            });
+        }
+
+        loadAnime();
+    </script>
+
+</body>
+</html>
